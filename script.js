@@ -101,6 +101,13 @@ window.onload = function() {
     }
   });
 
+  canvas.addEventListener("touchstart", function() {
+    bird.flap();
+    if (gameOver) {
+      resetGame();
+    }
+  });
+
   // Reset the game state
   function resetGame() {
     bird.y = 150;
