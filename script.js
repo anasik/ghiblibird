@@ -86,15 +86,14 @@ window.onload = function() {
       if (this.y + this.height >= canvas.height) {
         gameOver = true;
       }
+      if(this.y <= 0) {
+        this.y = 0;
+      }
     },
     flap: function() {
       this.velocity = -this.jump;
       this.angle -= 0.05; // tilt upward immediately on flap
       this.flapTime = 10;      // show wings-up for 10 frames
-      if (this.y <= this.height ) {
-        this.y = 0;
-        this.velocity = 0;
-      }
     }
   };
 
