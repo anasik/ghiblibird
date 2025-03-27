@@ -17,7 +17,7 @@ window.onload = function() {
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;
   let frames = 0;
-  let gameSpeed = canvasWidth / 500;
+  let gameSpeed = Math.max(canvasWidth,canvasHeight) / 500;
   let gravity = 0.15;
   let gameOver = false;
 
@@ -84,7 +84,7 @@ window.onload = function() {
   }
 
   let pipes = [];
-  let pipeInterval = canvasWidth / 2; // new pipe every 90 frames
+  let pipeInterval = canvas.width < 800 ? canvas.width / 2 : 300;
   let score = 0;
 
   // Event listeners for controls
