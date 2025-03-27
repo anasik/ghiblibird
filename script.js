@@ -38,8 +38,8 @@ window.onload = function() {
   pipeSouthImg.src = "assets/pipe_bottom.png";
 
   // Define maximum tilt angles (in radians)
-  const maxUpAngle = -Math.PI / 6;    // about -30°
-  const maxDownAngle = Math.PI / 3;   // about 60°
+  const maxUpAngle = -Math.PI / 10;    // about -30°
+  const maxDownAngle = Math.PI / 1.5;   // about 60°
 
 
   // Bird object definition
@@ -76,9 +76,13 @@ window.onload = function() {
 
       // If falling, gradually rotate downward.
       if (this.velocity > 0 && this.angle < maxDownAngle) {
-        this.angle += 0.03;
+        this.angle += 0.02;
         if (this.angle > maxDownAngle) {
           this.angle = maxDownAngle;
+        }
+      } else {
+          if (this.angle < maxUpAngle) {
+            this.angle = maxUpAngle;
         }
       }
 
@@ -92,7 +96,7 @@ window.onload = function() {
     },
     flap: function() {
       this.velocity = -this.jump;
-      this.angle -= 0.05; // tilt upward immediately on flap
+      this.angle -= 0.03; // tilt upward immediately on flap
       this.flapTime = 10;      // show wings-up for 10 frames
     }
   };
@@ -151,6 +155,7 @@ window.onload = function() {
   function resetGame() {
     bird.y = 150;
     bird.velocity = 0;
+    bird.angle = 0;
     pipes = [];
     frames = 0;
     score = 0;
