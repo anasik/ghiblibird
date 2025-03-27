@@ -21,12 +21,15 @@ window.onload = function() {
   let gravity = 0.15;
   let gameOver = false;
 
-  // Load images
+  // Load assets.
   const backgroundImg = new Image();
   backgroundImg.src = "assets/background.png";
 
-  const birdImg = new Image();
-  birdImg.src = "assets/ghibli_bird.png";
+  const birdUpImg = new Image();
+  birdUpImg.src = "assets/ghibli_bird_up.png";
+
+  const birdDownImg = new Image();
+  birdDownImg.src = "assets/ghibli_bird_down.png";
 
   const pipeNorthImg = new Image();
   pipeNorthImg.src = "assets/pipe_top.png";
@@ -34,30 +37,60 @@ window.onload = function() {
   const pipeSouthImg = new Image();
   pipeSouthImg.src = "assets/pipe_bottom.png";
 
+  // Define maximum tilt angles (in radians)
+  const maxUpAngle = -Math.PI / 6;    // about -30°
+  const maxDownAngle = Math.PI / 3;   // about 60°
+
+
   // Bird object definition
   const bird = {
-    x: 50,
-    y: 150,
+    x: canvas.width * 0.1,
+    y: canvas.height * 0.5,
     width: 67,
     height: 69.8,
     velocity: 0,
     jump: 4.6,
+    angle: 0,
+    flapTime: 0, // number of frames to show wings-up
     draw: function() {
-      ctx.drawImage(birdImg, this.x, this.y, this.width, this.height);
+      ctx.save();
+      // Move the origin to the center of the bird.
+      ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+      ctx.rotate(this.angle);
+      // Draw the appropriate bird asset.
+      if (this.flapTime > 0) {
+        ctx.drawImage(birdUpImg, -this.width / 2, -this.height / 2, this.width, this.height);
+      } else {
+        ctx.drawImage(birdDownImg, -this.width / 2, -this.height / 2, this.width, this.height);
+      }
+      ctx.restore();
     },
     update: function() {
       this.velocity += gravity;
       this.y += this.velocity;
-      // Check if the bird hits the bottom of the canvas
-      if (this.y + this.height >= canvasHeight) {
-        gameOver = true;
+
+      // Decrease flap timer.
+      if (this.flapTime > 0) {
+        this.flapTime--;
       }
-      if(this.y <= 0) {
-        this.y = 0;
+
+      // If falling, gradually rotate downward.
+      if (this.velocity > 0 && this.angle < maxDownAngle) {
+        this.angle += 0.03;
+        if (this.angle > maxDownAngle) {
+          this.angle = maxDownAngle;
+        }
+      }
+
+      // Game over if bird hits the bottom.
+      if (this.y + this.height >= canvas.height) {
+        gameOver = true;
       }
     },
     flap: function() {
       this.velocity = -this.jump;
+      this.angle -= 0.05; // tilt upward immediately on flap
+      this.flapTime = 10;      // show wings-up for 10 frames
     }
   };
 
