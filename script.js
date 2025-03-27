@@ -52,6 +52,9 @@ window.onload = function() {
       if (this.y + this.height >= canvasHeight) {
         gameOver = true;
       }
+      if(this.y <= 0) {
+        this.y = 0;
+      }
     },
     flap: function() {
       this.velocity = -this.jump;
