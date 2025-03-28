@@ -96,7 +96,7 @@ window.onload = function() {
     },
     flap: function() {
       this.velocity = -this.jump;
-      this.angle -= 0.03; // tilt upward immediately on flap
+      this.angle = maxUpAngle; // tilt upward immediately on flap
       this.flapTime = 10;      // show wings-up for 10 frames
     }
   };
